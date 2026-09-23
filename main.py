@@ -262,3 +262,41 @@ st.write(
     "주요 제작 국가별로 어떤 장르의 영화가 주로 개봉하고 흥행했는지 제작 국가와 장르 간의 계층적 구성 비율을 시각적으로 파악할 수 있습니다."
 )
 st.divider()
+
+# -------------------------------------------------------------------
+# 여덟 번째 그래프: 박스오피스 롱런과 최종 관객수의 관계
+# -------------------------------------------------------------------
+st.subheader("8. 박스오피스 '롱런(Long-run)' 영화는 진정한 흥행 보증수표일까?")
+
+# Plotly 산점도/버블차트 생성
+fig_longrun = px.scatter(
+    df,
+    x="days_in_top10",
+    y="total_audi",
+    color="genre",
+    size="first_scrn",  # 원 크기로 개봉일 스크린수 반영
+    size_max=30,
+    hover_name="movieNm",
+    title="박스오피스 '롱런(Long-run)' 영화는 진정한 흥행 보증수표일까?",
+    labels={
+        "days_in_top10": "10위권 진입 일수 (일)",
+        "total_audi": "총 관객수",
+        "genre": "장르",
+        "first_scrn": "개봉일 스크린수",
+    },
+    custom_data=["first_scrn"],
+)
+
+fig_longrun.update_traces(
+    hovertemplate="<b>%{hovertext}</b><br>10위권 체류: %{x}일<br>총 관객수: %{y:,}명<br>개봉일 스크린수: %{customdata[0]:,}개<extra></extra>"
+)
+
+st.plotly_chart(fig_longrun, use_container_width=True)
+
+# 시각화 해석 영역
+st.divider()
+st.markdown("##### 💡 이 그래프로 알 수 있는 것")
+st.write(
+    "10위권에 오래 머무른(days_in_top10이 큰) 영화일수록 대체로 총 관객수도 높은 강력한 양의 상관관계를 보이며, 초기 스크린수(점 크기)가 적었더라도 입소문으로 오랜 기간 상위권을 유지하며 대박을 터뜨린 실질적 롱런 흥행작을 식별할 수 있습니다."
+)
+st.divider()
